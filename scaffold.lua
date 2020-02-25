@@ -33,21 +33,22 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(T)
   regularntp.once_ntp()
   regularntp.start_timer()
 
-  mqttwrap.on("message", function(topic, data)
-    print("MQTT: inbound publish on ".. topic .. ":" )
-    if data ~= nil then
-      print(data)
-    end
-
-    -- This admittedly isn't as generic as you might want it to be:
-    if "command/settings/"..myname.."/location" == topic then
-      flashsettings.set("location",data)
-      node.restart()
-    end
-    if "command/flash/"..myname == topic then
-      print ("Got hit on commands/flash/"..myname.." so flashing...")
-      LFS.HTTP_OTA(ota_host, '/imgs/', myname..'.img')
-    end
+  mqttwrap.handletopic("command/ping/"..myname, function(topic, data)
+    local ip = wifi.sta.getip()
+    local b_basic,b_extended = node.bootreason()
+    mqttwrap.maybepublish("command/pong/"..myname, string.format('{"myname":"%s","ip":"%s","bootreason":{"basic":%d,"extended":%d},"time_boot":%d}',myname,ip,b_basic,b_extended,time_boot), 0, 0)
+  end)
+  mqttwrap.handletopic("command/settings/"..myname.."/location", function(topic, data)
+    flashsettings.set("location",data)
+    node.restart()
+  end)
+  mqttwrap.handletopic("command/settings/"..myname.."/name", function(topic, data)
+    flashsettings.set("myname",data)
+    node.restart()
+  end)
+  mqttwrap.handletopic("command/flash/"..myname, function(topic, data)
+    print ("Got hit on commands/flash/"..myname.." so flashing...")
+    LFS.HTTP_OTA('192.168.1.10', '/imgs/', myname..'.img')
   end)
 
 
@@ -70,9 +71,9 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(T)
 
 
   end)
-end)
 
-wifi.eventmon.register(wifi.eventmon.STA_DISCONNECTED, function(T)
-  print("WiFi: lost. Rebooting")
-  node.restart()
+  wifi.eventmon.register(wifi.eventmon.STA_DISCONNECTED, function(T)
+    print("WiFi: lost. Rebooting")
+    node.restart()
+  end)
 end)
