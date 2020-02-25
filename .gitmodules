@@ -1,0 +1,6 @@
+[submodule "nodemcu-firmware"]
+	path = nodemcu-firmware
+	url = https://github.com/nodemcu/nodemcu-firmware
+[submodule "nodemcu-libs"]
+	path = nodemcu-libs
+	url = https://github.com/skrewz/nodemcu-libs
