@@ -1,1 +1,0 @@
-../nodemcu-firmware/lua_examples/lfs/HTTP_OTA.lua

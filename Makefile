@@ -15,8 +15,8 @@ lfs.img: $(LUAC_CROSS) $(DEFAULT_PROJECT_FILES)
 	$(LUAC_CROSS) -f -o lfs.img $(DEFAULT_PROJECT_FILES)
 
 upload_lfs: lfs.img
-	nodemcu-tool upload -c lfs.img
-	@echo "---> lfs.img uploaded; now run node.flashreload(\"lfs.img\") on the device"
+	nodemcu-tool upload -c lfs.img --remotename lfs_inc.img
+	@echo "---> lfs.img uploaded; now run node.flashreload(\"lfs_inc.img\") on the device"
 
 upload: upload_lfs init.lua
 	nodemcu-tool upload init.lua
