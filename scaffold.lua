@@ -3,14 +3,10 @@ payload = LFS.payload()
 payload.early()
 
 
-bme680wrap = require ("bme680wrap")
 buildinfo = require ("buildinfo")
-ca = require ("ca")
-ccs811wrap = require ("ccs811wrap")
 flashsettings = require ("flashsettings")
 logger = require ("filelog")
 mqttwrap = require ("mqttwrap")
-pms5003 = require ("pms5003")
 regularntp = require ("regularntp")
 
 -- time_boot is set and updated by the regularntp module:

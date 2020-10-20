@@ -36,7 +36,7 @@ console:
 terminal:
 	nodemcu-tool terminal
 
-lfs_flash:
+lfs_flash: upload_lfs
 	# experimental stuff, for now (hard to catch the device while it's not busy)
 	@echo "Flashing lfs_inc.img on device..."
 	echo 'node.flashreload("lfs_inc.img")' | timeout 5 nodemcu-tool terminal 2>&1 || true | grep -q "LFS region updated."
