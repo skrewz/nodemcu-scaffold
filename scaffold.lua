@@ -2,13 +2,16 @@
 payload = LFS.payload()
 payload.early()
 
-mqttwrap = require ("mqttwrap")
+
 bme680wrap = require ("bme680wrap")
-ccs811wrap = require ("ccs811wrap")
-regularntp = require ("regularntp")
+buildinfo = require ("buildinfo")
 ca = require ("ca")
-logger = require ("filelog")
+ccs811wrap = require ("ccs811wrap")
 flashsettings = require ("flashsettings")
+logger = require ("filelog")
+mqttwrap = require ("mqttwrap")
+pms5003 = require ("pms5003")
+regularntp = require ("regularntp")
 
 -- time_boot is set and updated by the regularntp module:
 time_boot = nil
@@ -34,7 +37,7 @@ generate_status_json = function ()
     if file.exists("lfs.modified") then
       last_modified = file.getcontents("lfs.modified")
     end
-    return string.format('{"myname":"%s","ip":"%s","bootreason":{"basic":%d,"extended":%d},"time_boot":%d,"lfs":{"error_msg": "%s","last_modified": "%s"}}',myname,ip,b_basic,b_extended,time_boot,flash_error_msg,last_modified)
+    return string.format('{"myname":"%s","ip":"%s","bootreason":{"basic":%d,"extended":%d},"time_boot":%d,"lfs":{"error_msg": "%s","last_modified": "%s"},"build_timestamp": "%s"}',myname,ip,b_basic,b_extended,time_boot,flash_error_msg,last_modified,buildinfo.build_timestamp)
 end
 
 
@@ -56,6 +59,7 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(T)
     end)
     mqttwrap.handletopic("command/flash/"..myname, function(topic, data)
       print ("Got hit on commands/flash/"..myname.." so flashing...")
+      mqttwrap.maybepublish("command/acknowledged/"..myname,"flash command acknowledged", 0, 0)
       LFS.http_ota('192.168.1.10', '/imgs/', myname..'.img')
     end)
 
