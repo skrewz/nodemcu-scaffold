@@ -61,7 +61,7 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(T)
 
 
     mqttwrap.on("err",function() logger.writeln("activity", "mqtt hard error"); node.restart() end)
-    mqttwrap.on("disconnect",function() logger.writeln("activity", "mqtt disconnect") end)
+    mqttwrap.on("disconnect",function() logger.writeln("activity", "mqtt disconnect"); node.restart() end)
     mqttwrap.reconnect(mqtt_host, mqtt_port, function()
 
       local js = generate_status_json()
