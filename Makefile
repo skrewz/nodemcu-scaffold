@@ -27,7 +27,7 @@ upload: upload_lfs init.lua
 push_for_ota: lfs.img device_ids.txt
 	@# You'd put lines like 'c12345678 # some sensor' into device_ids.txt
 	grep -o '^[^#]*' device_ids.txt | while read device_id; do \
-	  rsync -v lfs.img 192.168.1.10:/var/www/imgs/$${device_id}.img || exit 1 ; \
+	  rsync -v lfs.img 192.168.0.10:/var/www/imgs/$${device_id}.img || exit 1 ; \
 	done
 
 console:

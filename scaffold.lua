@@ -11,7 +11,7 @@ regularntp = require ("regularntp")
 
 -- time_boot is set and updated by the regularntp module:
 time_boot = nil
-ota_host = "192.168.1.10"
+ota_host = "192.168.0.10"
 mqtt_host = "homemqtt.skrewz.net"
 mqtt_port = 8883;
 
@@ -56,7 +56,7 @@ wifi.eventmon.register(wifi.eventmon.STA_GOT_IP, function(T)
     mqttwrap.handletopic("command/flash/"..myname, function(topic, data)
       print ("Got hit on commands/flash/"..myname.." so flashing...")
       mqttwrap.maybepublish("command/acknowledged/"..myname,"flash command acknowledged", 0, 0)
-      LFS.http_ota('192.168.1.10', '/imgs/', myname..'.img')
+      LFS.http_ota('192.168.0.10', '/imgs/', myname..'.img')
     end)
 
 
